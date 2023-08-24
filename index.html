@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Network Slicing sst / sd / sNSSAI calculator</title>
+    <style>
+        p {
+            margin: 0;
+            padding: 0;
+        }
+        .input-group {
+            margin-bottom: 0;
+        }
+    </style>
+    <script>
+        function calculateSNSSAI() {
+            // Get input values
+            var sstHex = document.getElementById("sst").value;
+            var sdHex = document.getElementById("sd").value;
+
+            // Convert HEX to DEC
+            var sstDec = parseInt(sstHex, 16);
+            var sdDec = parseInt(sdHex, 16);
+
+            // Concatenate sst and sd as a string
+            var concatenatedHex = sstHex + sdHex;
+
+            // Convert concatenatedHex to DEC
+            var sNSSAI = parseInt(concatenatedHex, 16);
+
+            // Display results
+            document.getElementById("sstDec").textContent = sstDec;
+            document.getElementById("sdDec").textContent = sdDec;
+            document.getElementById("sNSSAI").textContent = sNSSAI;
+
+            // Generate CU and DU XML
+            var cuXml = '<sliceList>\n' +
+                        '    <sst>' + sstDec + '</sst>\n' +
+                        '    <sd>' + sdDec + '</sd>\n' +
+                        '</sliceList>';
+            
+            var duXml = '<bcastPlmnInfo>\n' +
+                        '    <sNSSAI>' + sNSSAI + '</sNSSAI>\n' +
+                        '    <sNSSAI>' + sNSSAI + '</sNSSAI>\n' +
+                        '</bcastPlmnInfo>';			
+
+            document.getElementById("cuXml").textContent = cuXml;
+            document.getElementById("duXml").textContent = duXml;
+        }
+    </script>
+</head>
+<body>
+    <h1>Network Slicing sst / sd / sNSSAI calculator</h1>
+    <p style="margin: 0;">Author: Dustin_Chen, email: <a href="mailto:Dustin_Chen@compal.com" style="line-height: 1;">Dustin_Chen@compal.com</a> or <a href="mailto:chuhpsdustin@gmail.com" style="line-height: 1;">chuhpsdustin@gmail.com</a></p>
+    <br>
+	<p>ex: 輸入SST = 01, SD = 030609 </p>
+	<br>
+    <label for="sst">Slice service type(SST):</label>
+    <input type="text" id="sst" placeholder="HEX value" style="width: 70px;" /><br><br>
+	
+    <label for="sd">Slice differentiator(SD):</label>
+    <input type="text" id="sd" placeholder="HEX value" style="width: 70px;" /><br><br>
+	
+    <button onclick="calculateSNSSAI()">Calculate</button><br><br>
+    <p>sst (DEC value) = <span id="sstDec"></span></p>
+    <p>sd (DEC value) = <span id="sdDec"></span></p>
+    <p>sNSSAI (DEC value) = <span id="sNSSAI"></span></p>
+    <h3>CU xml:</h3>
+    <pre id="cuXml"></pre>
+    <h3>DU xml:</h3>
+    <pre id="duXml"></pre>
+</body>
+</html>
