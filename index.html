@@ -39,15 +39,17 @@
             document.getElementById("sNSSAI").textContent = sNSSAI;
 
             // Generate CU and DU XML
-            var cuXml = '<sliceList>\n' +
+            
+            var cuXml = '<bcastPlmnInfo>\n' +
+                        '    <sNSSAI>' + sNSSAI + '</sNSSAI>\n' +
+                        '    <sNSSAI>' + sNSSAI + '</sNSSAI>\n' +
+                        '</bcastPlmnInfo>';		
+						
+            var duXml = '<sliceList>\n' +
                         '    <sst>' + sstDec + '</sst>\n' +
                         '    <sd>' + sdDec + '</sd>\n' +
                         '</sliceList>';
-            
-            var duXml = '<bcastPlmnInfo>\n' +
-                        '    <sNSSAI>' + sNSSAI + '</sNSSAI>\n' +
-                        '    <sNSSAI>' + sNSSAI + '</sNSSAI>\n' +
-                        '</bcastPlmnInfo>';			
+	
 
             document.getElementById("cuXml").textContent = cuXml;
             document.getElementById("duXml").textContent = duXml;
@@ -60,7 +62,8 @@
     <br>
 	<p>< 23.003 - Figure 28.4.2-1: Structure of S-NSSAI ></p>
 	<img src="https://raw.githubusercontent.com/dustinchen26/slice/master/picture.png" alt="GitHub Image" width="400">
-	<p>ex: 輸入SST = 01, SD = 030609 </p>
+	<p>Example1 (Auray Viavi):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; input SST = 01, SD = 030609 => Calculate sst = 1, sd = 198153, sNSSAI = 16975369<br></p>
+	<p>Example2 (Compal Saviah): input SST = 01, SD = 010203 => Calculate sst = 1, sd = 66051, sNSSAI = 16843267 <br></p>
 	<br>
     <label for="sst">Slice service type(SST):</label>
     <input type="text" id="sst" placeholder="HEX value" style="width: 70px;" /><br><br>
