@@ -2,10 +2,11 @@
   Copyright © [2023] [Dustin_Chen]. All rights reserved.
   Author: Dustin_Chen
   Email:  Dustin_Chen@compal.com or chuhpsdustin@gmail.com
--->  
+-->
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Network Slicing sst / sd / sNSSAI calculator</title>
     <style>
@@ -13,8 +14,24 @@
             margin: 0;
             padding: 0;
         }
+
         .input-group {
             margin-bottom: 0;
+        }
+
+        .example-item span {
+            color: blue;
+        }
+
+        /* Reduce line height for h3 and the next line */
+        h3,
+        p+ul {
+            line-height: 0;
+        }
+
+        /* Make text inside <p> red */
+        p.red-text {
+            color: red;
         }
     </style>
     <script>
@@ -39,45 +56,72 @@
             document.getElementById("sNSSAI").textContent = sNSSAI;
 
             // Generate CU and DU XML
-            
+
             var cuXml = '<bcastPlmnInfo>\n' +
-                        '    <sNSSAI>' + sNSSAI + '</sNSSAI>\n' +
-                        '    <sNSSAI>' + sNSSAI + '</sNSSAI>\n' +
-                        '</bcastPlmnInfo>';		
-						
+                '    <sNSSAI>' + sNSSAI + '</sNSSAI>\n' +
+                '    <sNSSAI>' + sNSSAI + '</sNSSAI>\n' +
+                '</bcastPlmnInfo>';
+
             var duXml = '<sliceList>\n' +
-                        '    <sst>' + sstDec + '</sst>\n' +
-                        '    <sd>' + sdDec + '</sd>\n' +
-                        '</sliceList>';
-	
+                '    <sst>' + sstDec + '</sst>\n' +
+                '    <sd>' + sdDec + '</sd>\n' +
+                '</sliceList>';
 
             document.getElementById("cuXml").textContent = cuXml;
             document.getElementById("duXml").textContent = duXml;
         }
     </script>
 </head>
+
 <body>
     <h1>Network Slicing sst / sd / sNSSAI calculator</h1>
-    <p style="margin: 0;">Author: Dustin_Chen, email: <a href="mailto:Dustin_Chen@compal.com" style="line-height: 1;">Dustin_Chen@compal.com</a> or <a href="mailto:chuhpsdustin@gmail.com" style="line-height: 1;">chuhpsdustin@gmail.com</a></p>
+    <p style="margin: 0;">Author: Dustin_Chen, email: <a href="mailto:Dustin_Chen@compal.com"
+            style="line-height: 1;">Dustin_Chen@compal.com</a> or <a href="mailto:chuhpsdustin@gmail.com"
+            style="line-height: 1;">chuhpsdustin@gmail.com</a></p>
     <br>
-	<p>< 23.003 - Figure 28.4.2-1: Structure of S-NSSAI ></p>
-	<img src="https://raw.githubusercontent.com/dustinchen26/slice/master/picture.png" alt="GitHub Image" width="400">
-	<p>Example1 (Auray Viavi):&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; input SST = 01, SD = 030609 => Calculate sst = 1, sd = 198153, sNSSAI = 16975369<br></p>
-	<p>Example2 (Compal Saviah): input SST = 01, SD = 010203 => Calculate sst = 1, sd = 66051, sNSSAI = 16843267 <br></p>
-	<br>
-    <label for="sst">Slice service type(SST):</label>
-    <input type="text" id="sst" placeholder="HEX value" style="width: 70px;" /><br><br>
-	
-    <label for="sd">Slice differentiator(SD):</label>
-    <input type="text" id="sd" placeholder="HEX value" style="width: 70px;" /><br><br>
-	
-    <button onclick="calculateSNSSAI()">Calculate</button><br><br>
-    <p>sst (DEC value) = <span id="sstDec"></span></p>
-    <p>sd (DEC value) = <span id="sdDec"></span></p>
-    <p>sNSSAI (DEC value) = <span id="sNSSAI"></span></p>
-    <h3>CU xml:</h3>
-    <pre id="cuXml"></pre>
-    <h3>DU xml:</h3>
-    <pre id="duXml"></pre>
+    <p>
+        < 23.003 - Figure 28.4.2-1: Structure of S-NSSAI>
+    </p>
+    <img src="https://raw.githubusercontent.com/dustinchen26/slice/master/picture.png" alt="GitHub Image" width="400">
+
+    <ul>
+        <li class="example-item"> <b>Example</b>
+            <ul>
+                <li><span>Compal_Saviah => Input SST = 01, SD = 010203 </span>=> Calculate sst = 1, sd = 66051, sNSSAI =
+                    16843267</li>
+                <li><span>Auray_Viavi => Input SST = 01, SD = 030609 </span>=> Calculate sst = 1, sd = 198153, sNSSAI =
+                    16975369</li>
+                <li><span>CSC_Cisco => Input SST = 02, SD = 000001 </span>=> Calculate sst = 2, sd = 1, sNSSAI =
+                    33554433</li>
+            </ul>
+        </li>
+        <br>
+
+        <li> <b>Input the SST, SD below, and press "Calculate" to get the CU, DU xml parameter</b>
+            <ul>
+                <li>
+                    Slice service type(SST):
+                    <input type="text" id="sst" placeholder="HEX value" style="width: 80px;" />
+                </li>
+                <li>
+                    Slice differentiator(SD):
+                    <input type="text" id="sd" placeholder="HEX value" style="width: 80px;" />
+                </li>
+                <button onclick="calculateSNSSAI()">Calculate</button><br>
+                <p>sst (DEC value) = <span id="sstDec"></span></p>
+                <p>sd (DEC value) = <span id="sdDec"></span></p>
+                <p>sNSSAI (DEC value) = <span id="sNSSAI"></span></p>
+                <br>
+                <p class="red-text"><b>CU xml:</b>
+                    <p>
+                        <pre id="cuXml"></pre>
+                        <p class="red-text"><b>DU xml:</b>
+                            <p>
+                                <pre id="duXml"></pre>
+            </ul>
+        </li>
+    </ul>
+
 </body>
+
 </html>
