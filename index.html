@@ -103,17 +103,17 @@
             style="line-height: 1;">chuhpsdustin@gmail.com</a></p>
     <br>
     <p>
-        < 23.003 - Figure 28.4.2-1: Structure of S-NSSAI>
+        < 23.003 - Figure 28.4.2-1: Structure of S-NSSAI> The SST is 2 HEX bits. The SD is 6 HEX bits. The sNSSAI is 8 HEX bits. The CU,DU xml are DEC format. 
     </p>
     <img src="https://raw.githubusercontent.com/dustinchen26/slice/master/picture.png" alt="GitHub Image" width="400">
 
     <ul>
         <li class="example-item"> <b>Example</b>
             <ul>
-                <li><span>Compal_Saviah => Input SST = 01, SD = 010203 </span>=> Calculate sst = 1, sd = 66051, sNSSAI =  16843267</li>
-                <li><span>Auray_Viavi => Input SST = 01, SD = 030609 </span>=> Calculate sst = 1, sd = 198153, sNSSAI =  16975369</li>
-                <li><span>CSC_Cisco => Input SST = 02, SD = 000001 </span>=> Calculate sst = 2, sd = 1, sNSSAI = 33554433</li>
-                <li><span>example => Input SST = 01, SD = FFFFFF </span>=> Calculate sst = 1, sd = 16777215, sNSSAI = 33554431</li>
+                <li><span>Compal_Saviah => Input SST = 01, SD = 010203 </span>=> Calculate sst = 1, sd = 66051, sNSSAI =  16843267 (filled into CU,DU xml)</li>
+                <li><span>Auray_Viavi => Input SST = 01, SD = 030609 </span>=> Calculate sst = 1, sd = 198153, sNSSAI =  16975369 (filled into CU,DU xml)</li>
+                <li><span>CSC_Cisco => Input SST = 02, SD = 000001 </span>=> Calculate sst = 2, sd = 1, sNSSAI = 33554433 (filled into CU,DU xml)</li>
+                <li><span>example => Input SST = 01, SD = FFFFFF </span>=> Calculate sst = 1, sd = 16777215, sNSSAI = 33554431 (filled into CU,DU xml)</li>
             </ul>
         </li>
         <br>
@@ -129,9 +129,9 @@
                     <input type="text" id="sd" placeholder="HEX value" style="width: 80px;" maxlength="6" />
                 </li>
                 <button onclick="calculateSNSSAI()">Calculate</button><br>
-                <p>sst (DEC value) = <span id="sstDec"></span></p>
-                <p>sd (DEC value) = <span id="sdDec"></span></p>
-                <p>sNSSAI (DEC value) = <span id="sNSSAI"></span></p>
+                <p>sst (DEC value, 0 to 255 = 2^8-1) = <span id="sstDec"></span></p>
+                <p>sd (DEC value, 0 to 16777215 = 2^24-1) = <span id="sdDec"></span></p>
+                <p>sNSSAI (DEC value, 0 to 4294967295 = 2^32-1) = <span id="sNSSAI"></span></p>
                 <br>
                 <p class="red-text"><b>CU xml(DEC value):</b>
                     <p>
