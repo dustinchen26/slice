@@ -3,30 +3,37 @@ online calculate: https://dustinchen26.github.io/slice
 
 ## Description & example
 ```
-● Example
-(1) Compal_Saviah => Input SST = 01, SD = 010203 => Calculate sst = 1, sd = 66051, sNSSAI = 16843267
-(2) Auray_Viavi => Input SST = 01, SD = 030609 => Calculate sst = 1, sd = 198153, sNSSAI = 16975369
-(3) CSC_Cisco => Input SST = 02, SD = 000001 => Calculate sst = 2, sd = 1, sNSSAI = 33554433
+【Example】
+1.Compal_Saviah => Input SST = 01, SD = 010203 => sNSSAI = 16843267
+2.Auray_Viavi 	=> Input SST = 01, SD = 030609 => sNSSAI = 16975369
+3.CSC_Cisco 	=> Input SST = 02, SD = 000001 => sNSSAI = 33554433
+4.Example 		=> Input SST = 01, SD = FFFFFF => sNSSAI = 33554431
 
-● Input the SST, SD below, and press "Calculate" to get the CU, DU xml parameter
-Slice service type(SST): 01
-Slice differentiator(SD): 010203
+【1】Input SST/SD → Calculate sNSSAI
+Slice service type(SST)(2 HEX bits): 01
+Slice differentiator(SD)(6 HEX bits): 010203
 
-【Calculate】
-sst (DEC value) = 1
-sd (DEC value) = 66051
-sNSSAI (DEC value) = 16843267
+● Calculate
+sst (DEC) = 1
+sd (DEC) = 66051
+sNSSAI (DEC) = 16843267
 
-【CU xml:】
+● CU xml(DEC value):
 <bcastPlmnInfo>
     <sNSSAI>16843267</sNSSAI>
     <sNSSAI>16843267</sNSSAI>
 </bcastPlmnInfo>
 
-【DU xml:】
+● DU xml(DEC value):
 <sliceList>
     <sst>1</sst>
     <sd>66051</sd>
 </sliceList>
 
+【2】Reverse: Input sNSSAI (DEC) → SST / SD
+sNSSAI (DEC value 0 ~ 4294967295): 16843267
+
+Reverse Convert
+SST (HEX) = 01
+SD (HEX) = 010203
 ```

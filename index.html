@@ -39,7 +39,16 @@
             color: red;
         }
     </style>
+
     <script>
+        function isHex(str) {
+            var hexRegex = /^[0-9A-Fa-f]+$/g;
+            return hexRegex.test(str);
+        }
+
+        /* ----------------------------------- */
+        /*   HEX SST + HEX SD → DEC sNSSAI     */
+        /* ----------------------------------- */
         function calculateSNSSAI() {
             // Get input values
             var sstHex = document.getElementById("sst").value.trim();
@@ -47,13 +56,13 @@
 
             // Check input lengths
             if (sstHex.length !== 2 || sdHex.length !== 6) {
-                alert("Please enter SST as a 2-digit hexadecimal number and SD as a 6-digit hexadecimal number.");
+                alert("Please enter SST as 2 HEX digits and SD as 6 HEX digits.");
                 return;
             }
 
             // Check if inputs are hexadecimal
             if (!isHex(sstHex) || !isHex(sdHex)) {
-                alert("Please enter valid hexadecimal values for SST and SD.");
+                alert("Please enter valid HEX values.");
                 return;
             }
 
@@ -88,57 +97,102 @@
             document.getElementById("duXml").textContent = duXml;
         }
 
-        // Function to check if string is hexadecimal
-        function isHex(str) {
-            var hexRegex = /^[0-9A-Fa-f]+$/g;
-            return hexRegex.test(str);
+        /* ----------------------------------- */
+        /*      DEC sNSSAI → SST / SD           */
+        /* ----------------------------------- */
+        function reverseSNSSAI() {
+            var decValue = document.getElementById("revInput").value.trim();
+
+            if (decValue === "" || isNaN(decValue)) {
+                alert("Please enter a valid decimal number.");
+                return;
+            }
+
+            var num = parseInt(decValue, 10);
+            if (num < 0 || num > 4294967295) {
+                alert("Value must be within 0 to 2^32-1.");
+                return;
+            }
+
+            var hex8 = num.toString(16).toUpperCase().padStart(8, "0");
+
+            var sstHex = hex8.substring(0, 2);
+            var sdHex = hex8.substring(2, 8);
+
+            document.getElementById("revSST").textContent = sstHex;
+            document.getElementById("revSD").textContent = sdHex;
+
+            /* 自動填入最上面欄位 */
+            document.getElementById("sst").value = sstHex;
+            document.getElementById("sd").value = sdHex;
         }
     </script>
 </head>
 
 <body>
     <h2>Network Slicing sst / sd / sNSSAI calculator</h2>
-    <p style="margin: 0;">Author: Dustin_Chen, email: <a href="mailto:Dustin_Chen@compal.com"
-            style="line-height: 1;">Dustin_Chen@compal.com</a> or <a href="mailto:chuhpsdustin@gmail.com"
-            style="line-height: 1;">chuhpsdustin@gmail.com</a></p>
+    <p style="margin: 0;">Author: Dustin_Chen, email: <a href="mailto:Dustin_Chen@compal.com">Dustin_Chen@compal.com</a> or 
+    <a href="mailto:chuhpsdustin@gmail.com">chuhpsdustin@gmail.com</a></p>
     <br>
-    <p>
-        < 23.003 - Figure 28.4.2-1: Structure of S-NSSAI> The SST is 2 HEX bits. The SD is 6 HEX bits. The sNSSAI is 8 HEX bits. The CU,DU xml are DEC format. 
-    </p>
-    <img src="https://raw.githubusercontent.com/dustinchen26/slice/master/picture.png" alt="GitHub Image" width="400">
+
+    <p>< 23.003 - Figure 28.4.2-1: Structure of S-NSSAI > SST is 2 HEX bits, SD is 6 HEX bits, sNSSAI is 8 HEX bits.</p>
+    <img src="https://raw.githubusercontent.com/dustinchen26/slice/master/picture.png" width="400">
 
     <ul>
-        <li class="example-item"> <b>Example</b>
+        <li class="example-item"><b>Example</b>
             <ul>
-                <li><span>Compal_Saviah => Input SST = 01, SD = 010203 </span>=> Calculate sst = 1, sd = 66051, sNSSAI =  16843267 (filled into CU,DU xml)</li>
-                <li><span>Auray_Viavi => Input SST = 01, SD = 030609 </span>=> Calculate sst = 1, sd = 198153, sNSSAI =  16975369 (filled into CU,DU xml)</li>
-                <li><span>CSC_Cisco => Input SST = 02, SD = 000001 </span>=> Calculate sst = 2, sd = 1, sNSSAI = 33554433 (filled into CU,DU xml)</li>
-                <li><span>example => Input SST = 01, SD = FFFFFF </span>=> Calculate sst = 1, sd = 16777215, sNSSAI = 33554431 (filled into CU,DU xml)</li>
+                <li><span>Compal_Saviah => Input SST = 01, SD = 010203</span> => sNSSAI = 16843267</li>
+                <li><span>Auray_Viavi => Input SST = 01, SD = 030609</span> => sNSSAI = 16975369</li>
+                <li><span>CSC_Cisco => Input SST = 02, SD = 000001</span> => sNSSAI = 33554433</li>
+                <li><span>Example => Input SST = 01, SD = FFFFFF</span> => sNSSAI = 33554431</li>
             </ul>
         </li>
         <br>
 
-        <li> <b>Input the SST, SD below, and press "Calculate" to get the CU, DU xml parameter</b>
+        <!-- ------------------------------ -->
+        <!-- Forward Conversion (HEX → DEC) -->
+        <!-- ------------------------------ -->
+        <li><b>Input SST/SD → Calculate sNSSAI</b>
             <ul>
                 <li>
                     Slice service type(SST)(2 HEX bits):
-                    <input type="text" id="sst" placeholder="HEX value" style="width: 80px;" maxlength="2" />
+                    <input type="text" id="sst" value="01" style="width: 80px;" maxlength="2" />
                 </li>
                 <li>
                     Slice differentiator(SD)(6 HEX bits):
-                    <input type="text" id="sd" placeholder="HEX value" style="width: 80px;" maxlength="6" />
+                    <input type="text" id="sd" value="010203" style="width: 80px;" maxlength="6" />
                 </li>
+
                 <button onclick="calculateSNSSAI()">Calculate</button><br>
-                <p>sst (DEC value, 0 to 255 = 2^8-1) = <span id="sstDec"></span></p>
-                <p>sd (DEC value, 0 to 16777215 = 2^24-1) = <span id="sdDec"></span></p>
-                <p>sNSSAI (DEC value, 0 to 4294967295 = 2^32-1) = <span id="sNSSAI"></span></p>
+                <p>sst (DEC) = <span id="sstDec"></span></p>
+                <p>sd (DEC) = <span id="sdDec"></span></p>
+                <p>sNSSAI (DEC) = <span id="sNSSAI"></span></p>
+
                 <br>
-                <p class="red-text"><b>CU xml(DEC value):</b>
-                    <p>
-                        <pre id="cuXml"></pre>
-                        <p class="red-text"><b>DU xml(DEC value):</b>
-                            <p>
-                                <pre id="duXml"></pre>
+                <p class="red-text"><b>CU xml(DEC value):</b></p>
+                <pre id="cuXml"></pre>
+
+                <p class="red-text"><b>DU xml(DEC value):</b></p>
+                <pre id="duXml"></pre>
+            </ul>
+        </li>
+
+        <br>
+
+        <!-- ------------------------------ -->
+        <!-- Reverse Conversion (DEC → HEX) -->
+        <!-- ------------------------------ -->
+        <li><b>Reverse: Input sNSSAI (DEC) → SST / SD</b>
+            <ul>
+                <li>
+                    sNSSAI (DEC value 0 ~ 4294967295):
+                    <input type="text" id="revInput" value="16843267" style="width: 150px;" />
+                </li>
+
+                <button onclick="reverseSNSSAI()">Reverse Convert</button><br>
+
+                <p>SST (HEX) = <span id="revSST"></span></p>
+                <p>SD (HEX) = <span id="revSD"></span></p>
             </ul>
         </li>
     </ul>
